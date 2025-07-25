@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Costco Dishwasher Installation Info</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #ffffff; padding: 20px; text-align: center; }
+    h2 { color: #2e6da4; }
+    .icon-button { background: none; border: none; cursor: pointer; margin: 15px; }
+    .icon-button img { width: 100px; height: 100px; transition: transform 0.2s; }
+    .icon-button img:hover { transform: scale(1.1); }
+    .info-box { display: none; max-width: 700px; margin: 10px auto; background: #fff; border: 1px solid #ccc; padding: 15px; text-align: left; }
+    .note { background: #e6f7ff; padding: 12px; margin-top: 20px; border-left: 5px solid #3399cc; text-align: left; max-width: 700px; margin: 20px auto; }
+    a.code-link { color: #2e6da4; text-decoration: none; }
+    a.code-link:hover { text-decoration: underline; }
+  </style>
+  <script>
+    function toggleInfo(id) {
+      document.querySelectorAll('.info-box').forEach(el => el.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+
+  <h2>Costco Dishwasher Installation – What’s Included</h2>
+  <p><strong>Standard installation is 100% free</strong> when your kitchen setup follows California codes. Click the icons below to learn more about each requirement:</p>
+
+  <div>
+    <button class="icon-button" onclick="toggleInfo('valve')">
+      <img src="https://tse2.mm.bing.net/th/id/OIP.HkcSDKOStTPtjg2nKPwqPAHaHa?pid=Api&P=0&h=220" alt="Valve Icon">
+      <div>Shut-Off Valve</div>
+    </button>
+    <button class="icon-button" onclick="toggleInfo('airgap')">
+      <img src="https://tse1.mm.bing.net/th/id/OIP.Y6GvZRPAaKndO0OJ-a8Q3QHaHa?pid=Api&P=0&h=220" alt="Air Gap Icon">
+      <div>Air Gap</div>
+    </button>
+    <button class="icon-button" onclick="toggleInfo('outlet')">
+      <img src="https://tse1.mm.bing.net/th/id/OIP.TFyTSlNQf8GDWYv420WxaAHaJl?pid=Api&P=0&h=220" alt="Outlet Icon">
+      <div>Electrical Outlet</div>
+    </button>
+  </div>
+
+  <div id="valve" class="info-box">
+    <strong>🔧 Water Shut-Off Valve</strong><br>
+    <a class="code-link" href="https://up.codes/viewer/california/ca-plumbing-code-2022/chapter/6/water-supply-and-distribution#606.5" target="_blank">
+      California Plumbing Code – CPC 606.0
+    </a><br>
+    A dedicated, accessible shut-off valve must be installed on the water line to allow safe maintenance of the dishwasher. If your valve is missing, corroded, or hidden, it must be updated before installation.<br>
+ Important:
+Installing a new appliance without ensuring a compliant control valve violates CPC 606.5 and may result in safety hazards or fines during inspections.
+  </div>
+
+  <div id="airgap" class="info-box">
+    <strong>🌬️ Air Gap Installation</strong><br>
+    <a class="code-link" href="https://up.codes/viewer/california/ca-plumbing-code-2022/chapter/8/indirect-wastes#807.3" target="_blank">
+      California Plumbing Code – CPC 807.3
+    </a><br>
+    An air gap is required to prevent backflow of dirty water into the dishwasher. If your sink lacks an air gap, one can be installed for an additional fee or by a licensed plumber.
+  </div>
+
+  <div id="outlet" class="info-box">
+    <strong>🔌 Electrical Outlet</strong><br>
+    <a class="code-link" href="https://up.codes/viewer/california/ca-electric-code-2022/chapter/4/equipment-for-general-use#422.16_(B)_(2)" target="_blank">
+      California Electrical Code – CEC 422.16(B)(1)
+    </a><br>
+    The dishwasher must plug into a grounded 110 V outlet that is accessible. Hardwiring without a disconnect is not permitted. An electrician may be required if no compliant outlet exists.
+  </div>
+
+  <div class="note">
+    ✅ If your kitchen setup meets California code, <strong>your installation will be done at no additional cost</strong>.<br>
+    ⚠️ If it doesn’t, you can approve added fees for upgrade work (when available) or hire an outside professional.
+  </div>
+
+</body>
+</html>
