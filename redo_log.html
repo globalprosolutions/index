@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redo Log - Rework Registry</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f3f3f3;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    form, .search-box {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #e0e0e0;
+    }
+    .delete-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+    .export-btn {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    .export-btn:hover {
+      background-color: #2980b9;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <h1>Redo Log (Rework Registry)</h1>
+
+  <div class="search-box">
+    <label>Search by Client Name:
+      <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Type client name...">
+    </label>
+  </div>
+
+  <form id="redoForm">
+    <label>Client:
+      <input type="text" name="client" required>
+    </label>
+    <label>Order Number:
+      <input type="text" name="order" required>
+    </label>
+    <label>Problem (max 500 characters):
+      <textarea name="problem" maxlength="500" required></textarea>
+    </label>
+    <label>Responsible Technician:
+      <select name="tech_responsible" required>
+        <option value="">Select</option>
+        <option value="Andres">Andres</option>
+        <option value="Ricardo">Ricardo</option>
+        <option value="Fernando">Fernando</option>
+        <option value="Julian">Julian</option>
+        <option value="Ferney">Ferney</option>
+        <option value="Johan">Johan</option>
+        <option value="Juliano">Juliano</option>
+        <option value="Lider">Lider</option>
+      </select>
+    </label>
+    <label>Applied Solution (max 500 characters):
+      <textarea name="solution" maxlength="500" required></textarea>
+    </label>
+    <label>Assigned Technician:
+      <select name="tech_executor" required>
+        <option value="">Select</option>
+        <option value="Andres">Andres</option>
+        <option value="Ricardo">Ricardo</option>
+        <option value="Fernando">Fernando</option>
+        <option value="Julian">Julian</option>
+        <option value="Ferney">Ferney</option>
+        <option value="Johan">Johan</option>
+        <option value="Juliano">Juliano</option>
+        <option value="Lider">Lider</option>
+      </select>
+    </label>
+    <button type="submit">Add Redo</button>
+  </form>
+
+  <button class="export-btn" onclick="exportToXLSX()">Export to XLSX</button>
+
+  <table id="redoTable">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Client</th>
+        <th>Order</th>
+        <th>Problem</th>
+        <th>Responsible Technician</th>
+        <th>Solution</th>
+        <th>Assigned Technician</th>
+        <th>Action</th>
+        <th>Send via WhatsApp</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const form = document.getElementById('redoForm');
+    const tableBody = document.getElementById('redoTable').querySelector('tbody');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const client = form.client.value;
+      const order = form.order.value;
+      const problem = form.problem.value;
+      const tech_responsible = form.tech_responsible.value;
+      const solution = form.solution.value;
+      const tech_executor = form.tech_executor.value;
+      const now = new Date().toLocaleDateString();
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${now}</td>
+        <td>${client}</td>
+        <td>${order}</td>
+        <td>${problem}</td>
+        <td>${tech_responsible}</td>
+        <td>${solution}</td>
+        <td>${tech_executor}</td>
+        <td><button class="delete-btn">Delete</button></td>
+        <td><button class="export-btn" onclick="sendWhatsApp(this)">Send</button></td>
+      `;
+
+      row.querySelector('.delete-btn').addEventListener('click', () => {
+        tableBody.removeChild(row);
+      });
+
+      tableBody.appendChild(row);
+      alert('Entry added successfully!');
+      form.reset();
+    });
+
+    function exportToXLSX() {
+      const table = document.getElementById("redoTable");
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.table_to_sheet(table, { raw: true });
+      XLSX.utils.book_append_sheet(wb, ws, "Redo Log");
+      XLSX.writeFile(wb, "redo_log.xlsx");
+    }
+
+    function sendWhatsApp(button) {
+      const row = button.closest("tr");
+      const cells = row.querySelectorAll("td");
+      const message = encodeURIComponent(
+        "*Date:* " + cells[0].innerText + "\n" +
+        "*Client:* " + cells[1].innerText + "\n" +
+        "*Order:* " + cells[2].innerText + "\n" +
+        "*Problem:* " + cells[3].innerText + "\n" +
+        "*Responsible Tech:* " + cells[4].innerText + "\n" +
+        "*Solution:* " + cells[5].innerText + "\n" +
+        "*Assigned Tech:* " + cells[6].innerText
+      );
+      const whatsappURL = "https://wa.me/?text=" + message;
+      window.open(whatsappURL, "_blank");
+    }
+
+    function filterTable() {
+      const input = document.getElementById("searchInput");
+      const filter = input.value.toLowerCase();
+      const rows = document.querySelectorAll("#redoTable tbody tr");
+
+      rows.forEach(row => {
+        const clientCell = row.cells[1].textContent.toLowerCase();
+        row.style.display = clientCell.includes(filter) ? "" : "none";
+      });
+    }
+  </script>
+
+</body>
+</html>
